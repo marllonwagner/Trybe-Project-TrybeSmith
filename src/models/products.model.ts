@@ -11,6 +11,13 @@ const insertProduct = async (insertedObj: InsertedProduct) => {
   return { id, name, amount };
 };
 
+const getAllProducts = async () => {
+  const query = 'SELECT * FROM Trybesmith.products';
+  const result = await connection.execute(query);
+  return result;
+};
+
 export default {
   insertProduct,
+  getAllProducts,
 };
