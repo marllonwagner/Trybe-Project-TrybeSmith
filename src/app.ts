@@ -4,13 +4,14 @@ import UsersController from './controllers/users.controller';
 import OrdersController from './controllers/orders.controller';
 import loginController from './controllers/login.controller';
 import { isLoginFieldsValid, isProductFieldsValid } from './middlewares/userLogin.validations';
+import isUserFieldsValid from './middlewares/userCreate.validations';
 
 const app = express();
 
 app.use(express.json());
 
 app.post('/products', isProductFieldsValid, ProductsController.insertProduct);
-app.post('/users', UsersController.insertUser);
+app.post('/users', isUserFieldsValid, UsersController.insertUser);
 app.post('/login', isLoginFieldsValid, loginController.userLogin);
 
 app.get('/products', ProductsController.getAllProducts);
