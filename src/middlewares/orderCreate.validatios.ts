@@ -1,14 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
-import { userSchema } from '../joi/schemas';
+import { orderSchema } from '../joi/schemas';
 
-const isUserFieldsValid = async (req: Request, res: Response, next: NextFunction) => {
+const isOrderFieldsValid = async (req: Request, res: Response, next: NextFunction) => {
   const reqBody = req.body;
-  const { error } = userSchema.validate(reqBody);
+  const { error } = orderSchema.validate(reqBody);
   const emptyFields = error?.message.includes('allowed');
   const notMinLength = error?.message.includes('must');
+  const notNumberArray = error?.message.includes('contain');
   const fieldName = error?.details[0].path;
   const statusCode = error?.details[0].type === 'any.required' ? 400 : 422;
-
+  
+  if (notNumberArray) {
+    return res.status(statusCode).json({ message: `"${fieldName}" must include only numbers` });
+  }
+  
   if (notMinLength) {
     return res.status(statusCode).json({ message: error?.message });
   }
@@ -20,4 +25,4 @@ const isUserFieldsValid = async (req: Request, res: Response, next: NextFunction
   return next();
 };
 
-export default isUserFieldsValid;
+export default isOrderFieldsValid;

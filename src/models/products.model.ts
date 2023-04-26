@@ -17,7 +17,17 @@ const getAllProducts = async () => {
   return result;
 };
 
+const createOrders = async (id:number, p:number) => {
+  const result = await connection.execute<ResultSetHeader>(
+    'UPDATE Trybesmith.products SET order_id = ? WHERE id=?',
+    [id, p],
+  );
+
+  return result;
+};
+
 export default {
   insertProduct,
   getAllProducts,
+  createOrders,
 };
